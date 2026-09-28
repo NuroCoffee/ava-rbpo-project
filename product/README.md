@@ -5,6 +5,7 @@
 ## Требования
 
 - Python 3.12+
+- PostgreSQL
 
 ## Локальный запуск
 
@@ -13,14 +14,20 @@ cd product
 python -m venv .venv
 .venv\Scripts\Activate.ps1
 python -m pip install -e ".[dev]"
-uvicorn club_service.main:app --reload
+cp .env.example .env
+uvicorn club_service.main:app --reload --env-file .env
 ```
+
+Перед запуском создайте базу `ava_club` в локальном PostgreSQL и при необходимости
+измените `DATABASE_URL` в `.env`. Health-check не создаёт таблицы и не требует миграций.
 
 После запуска доступны:
 
-- `GET http://127.0.0.1:8000/api/v1/health` — проверка работоспособности;
+- `GET http://127.0.0.1:8000/api/v1/health/live` — проверка процесса приложения;
+- `GET http://127.0.0.1:8000/api/v1/health/ready` — проверка соединения с PostgreSQL;
 - `http://127.0.0.1:8000/docs` — Swagger UI;
 - `http://127.0.0.1:8000/redoc` — ReDoc.
+
 
 Настройки читаются из переменных окружения. Пример находится в `.env.example`.
 

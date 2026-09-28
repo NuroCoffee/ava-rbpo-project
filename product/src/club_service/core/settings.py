@@ -1,5 +1,5 @@
 import os
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from functools import lru_cache
 
 
@@ -13,6 +13,10 @@ class Settings:
     app_env: str = "local"
     debug: bool = False
     api_prefix: str = "/api/v1"
+    database_url: str = field(
+        default="postgresql+psycopg://postgres:postgres@localhost:5432/ava_club",
+        repr=False,
+    )
 
 
 @lru_cache
@@ -21,4 +25,8 @@ def get_settings() -> Settings:
         app_name=os.getenv("APP_NAME", "AVA Club Service"),
         app_env=os.getenv("APP_ENV", "local"),
         debug=_as_bool(os.getenv("APP_DEBUG", "false")),
+        database_url=os.getenv(
+            "DATABASE_URL",
+            "postgresql+psycopg://postgres:postgres@localhost:5432/ava_club",
+        ),
     )
