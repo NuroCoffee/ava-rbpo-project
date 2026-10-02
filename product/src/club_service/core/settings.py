@@ -17,6 +17,11 @@ class Settings:
         default="postgresql+psycopg://postgres:postgres@localhost:5432/ava_club",
         repr=False,
     )
+    jwt_secret_key: str = field(
+        default="dev-only-change-me-32-characters-minimum",
+        repr=False,
+    )
+    jwt_access_token_ttl_minutes: int = 30
 
 
 @lru_cache
@@ -28,5 +33,12 @@ def get_settings() -> Settings:
         database_url=os.getenv(
             "DATABASE_URL",
             "postgresql+psycopg://postgres:postgres@localhost:5432/ava_club",
+        ),
+        jwt_secret_key=os.getenv(
+            "JWT_SECRET_KEY",
+            "dev-only-change-me-32-characters-minimum",
+        ),
+        jwt_access_token_ttl_minutes=int(
+            os.getenv("JWT_ACCESS_TOKEN_TTL_MINUTES", "30")
         ),
     )
