@@ -40,7 +40,13 @@ class User(Base):
     email: Mapped[str] = mapped_column(String(320), unique=True, index=True)
     password_hash: Mapped[str] = mapped_column(String(255))
     role: Mapped[UserRole] = mapped_column(
-        Enum(UserRole, native_enum=False, length=16),
+        Enum(
+            UserRole,
+            native_enum=False,
+            length=16,
+            create_constraint=True,
+            name="user_role",
+        ),
         default=UserRole.CLIENT,
         index=True,
     )
@@ -102,7 +108,13 @@ class Membership(Base):
     expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), index=True)
     remaining_visits: Mapped[int | None] = mapped_column(Integer, nullable=True)
     status: Mapped[MembershipStatus] = mapped_column(
-        Enum(MembershipStatus, native_enum=False, length=16),
+        Enum(
+            MembershipStatus,
+            native_enum=False,
+            length=16,
+            create_constraint=True,
+            name="membership_status",
+        ),
         default=MembershipStatus.ACTIVE,
         index=True,
     )
@@ -129,7 +141,7 @@ class Visit(Base):
     )
     registered_by: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="RESTRICT"))
     visited_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), index=True)
-    idempotency_key: Mapped[UUID] = mapped_column(unique=True)
+    idempotency_key: Mapped[UUID] = mapped_column()
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
         server_default=func.now(),
