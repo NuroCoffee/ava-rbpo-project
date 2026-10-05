@@ -38,7 +38,5 @@ def get_settings() -> Settings:
             "JWT_SECRET_KEY",
             "dev-only-change-me-32-characters-minimum",
         ),
-        jwt_access_token_ttl_minutes=int(
-            os.getenv("JWT_ACCESS_TOKEN_TTL_MINUTES", "30")
-        ),
+        jwt_access_token_ttl_minutes=int(os.getenv("JWT_ACCESS_TOKEN_TTL_MINUTES", "30")),
     )

@@ -4,6 +4,8 @@ from pydantic import BaseModel, ConfigDict, Field
 
 
 class MembershipPlanCreate(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
     name: str = Field(min_length=1, max_length=120)
     duration_days: int = Field(gt=0)
     visits_limit: int | None = Field(default=None, gt=0)

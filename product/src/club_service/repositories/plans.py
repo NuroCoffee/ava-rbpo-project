@@ -10,8 +10,6 @@ def get_plan_by_id(session: Session, plan_id: int) -> MembershipPlan | None:
 
 def list_active_plans(session: Session) -> list[MembershipPlan]:
     statement = (
-        select(MembershipPlan)
-        .where(MembershipPlan.is_active.is_(True))
-        .order_by(MembershipPlan.id)
+        select(MembershipPlan).where(MembershipPlan.is_active.is_(True)).order_by(MembershipPlan.id)
     )
     return list(session.scalars(statement))

@@ -8,9 +8,7 @@ from club_service.infrastructure.models import Membership, Visit
 
 def get_visit_by_idempotency_key(session: Session, key: UUID) -> Visit | None:
     statement = (
-        select(Visit)
-        .options(joinedload(Visit.membership))
-        .where(Visit.idempotency_key == key)
+        select(Visit).options(joinedload(Visit.membership)).where(Visit.idempotency_key == key)
     )
     return session.scalar(statement)
 

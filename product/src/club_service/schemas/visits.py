@@ -5,6 +5,8 @@ from pydantic import BaseModel, ConfigDict, Field
 
 
 class VisitCreate(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
     user_id: int = Field(gt=0)
     idempotency_key: UUID
 

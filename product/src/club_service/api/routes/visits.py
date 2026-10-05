@@ -32,8 +32,7 @@ def list_my_visits(
     current_user: Annotated[User, Depends(require_client)],
 ) -> list[VisitResponse]:
     return [
-        VisitResponse.model_validate(visit)
-        for visit in get_user_visits(session, current_user.id)
+        VisitResponse.model_validate(visit) for visit in get_user_visits(session, current_user.id)
     ]
 
 
@@ -43,7 +42,4 @@ def list_client_visits(
     session: SessionDependency,
     _: Annotated[User, Depends(require_employee)],
 ) -> list[VisitResponse]:
-    return [
-        VisitResponse.model_validate(visit)
-        for visit in get_user_visits(session, user_id)
-    ]
+    return [VisitResponse.model_validate(visit) for visit in get_user_visits(session, user_id)]

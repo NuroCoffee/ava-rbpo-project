@@ -27,6 +27,19 @@ def test_duplicate_email_is_rejected(api_client: ApiClient) -> None:
     assert response.status_code == 409
 
 
+def test_registration_cannot_set_role(api_client: ApiClient) -> None:
+    response = api_client.post(
+        "/api/v1/auth/register",
+        json={
+            "email": "client@example.com",
+            "password": "secure-password",
+            "role": "ADMIN",
+        },
+    )
+
+    assert response.status_code == 422
+
+
 def test_successful_login_and_current_user(api_client: ApiClient) -> None:
     api_client.post(
         "/api/v1/auth/register",

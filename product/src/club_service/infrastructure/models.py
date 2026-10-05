@@ -37,7 +37,7 @@ class User(Base):
     __tablename__ = "users"
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    email: Mapped[str] = mapped_column(String(320), unique=True, index=True)
+    email: Mapped[str] = mapped_column(String(320), unique=True)
     password_hash: Mapped[str] = mapped_column(String(255))
     role: Mapped[UserRole] = mapped_column(
         Enum(
@@ -101,9 +101,7 @@ class Membership(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="RESTRICT"))
-    plan_id: Mapped[int] = mapped_column(
-        ForeignKey("membership_plans.id", ondelete="RESTRICT")
-    )
+    plan_id: Mapped[int] = mapped_column(ForeignKey("membership_plans.id", ondelete="RESTRICT"))
     starts_at: Mapped[datetime] = mapped_column(DateTime(timezone=True))
     expires_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), index=True)
     remaining_visits: Mapped[int | None] = mapped_column(Integer, nullable=True)
@@ -136,9 +134,7 @@ class Visit(Base):
     )
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    membership_id: Mapped[int] = mapped_column(
-        ForeignKey("memberships.id", ondelete="RESTRICT")
-    )
+    membership_id: Mapped[int] = mapped_column(ForeignKey("memberships.id", ondelete="RESTRICT"))
     registered_by: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="RESTRICT"))
     visited_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), index=True)
     idempotency_key: Mapped[UUID] = mapped_column()
