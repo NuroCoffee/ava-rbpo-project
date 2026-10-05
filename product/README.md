@@ -15,6 +15,7 @@ python -m venv .venv
 .venv\Scripts\Activate.ps1
 python -m pip install -e ".[dev]"
 cp .env.example .env
+alembic upgrade head
 uvicorn club_service.main:app --reload --env-file .env
 ```
 
@@ -23,10 +24,10 @@ uvicorn club_service.main:app --reload --env-file .env
 
 После запуска доступны:
 
-- `GET http://127.0.0.1:8000/api/v1/health/live` — проверка процесса приложения;
-- `GET http://127.0.0.1:8000/api/v1/health/ready` — проверка соединения с PostgreSQL;
-- `http://127.0.0.1:8000/docs` — Swagger UI;
-- `http://127.0.0.1:8000/redoc` — ReDoc.
+- `GET http://127.0.0.1:8000/api/v1/health/live` - проверка процесса приложения;
+- `GET http://127.0.0.1:8000/api/v1/health/ready` - проверка соединения с PostgreSQL;
+- `http://127.0.0.1:8000/docs` - Swagger UI;
+- `http://127.0.0.1:8000/redoc` - ReDoc.
 
 
 Настройки читаются из переменных окружения. Пример находится в `.env.example`.
@@ -36,7 +37,26 @@ uvicorn club_service.main:app --reload --env-file .env
 ```powershell
 pytest
 ruff check .
+ruff format --check .
 ```
+
+Интеграционный тест PostgreSQL запускается только при наличии отдельной тестовой базы:
+
+```powershell
+$env:TEST_DATABASE_URL = "postgresql+psycopg://postgres:postgres@localhost:5432/ava_club_test"
+pytest -m postgresql
+```
+
+## Первые служебные пользователи
+
+После применения миграций создайте администратора и сотрудника:
+
+```powershell
+python -m club_service.cli create-admin --email admin@example.com
+python -m club_service.cli create-employee --email employee@example.com
+```
+
+Обе команды безопасно запрашивают пароль без отображения в консоли.
 
 ## Структура
 
